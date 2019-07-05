@@ -1,20 +1,29 @@
 <template>
-  <div id="app"></div>
+  <v-app>
+    <logbox ref="logbox" class="logbox ma-2"></logbox>
+    <connector @received="handleReceived($event)"></connector>
+  </v-app>
 </template>
 
 <script>
+import Connector from '@/components/Connector'
+import Logbox from '@/components/Logbox'
+
 export default {
-  name: 'app',
+  name: 'App',
+  components: {
+    Connector,
+    Logbox,
+  },
+  data() {
+    return {
+      //
+    }
+  },
+  methods: {
+    handleReceived(e) {
+      this.$refs.logbox.write(e)
+    },
+  },
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
