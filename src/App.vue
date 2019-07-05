@@ -3,7 +3,7 @@
     <h1>{{ motd }}</h1>
     <h4>Connection targets {{ backendUrl }}</h4>
     <logbox ref="logbox" class="logbox ma-2"></logbox>
-    <connector @received="handleReceived($event)"></connector>
+    <connector @write="writeToLogs($event)"></connector>
   </v-app>
 </template>
 
@@ -35,7 +35,7 @@ export default {
     },
   },
   methods: {
-    handleReceived(e) {
+    writeToLogs(e) {
       this.$refs.logbox.write(e)
     },
   },
