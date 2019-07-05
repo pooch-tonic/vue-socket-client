@@ -39,5 +39,25 @@ export default {
       }
     },
   },
+
+  sockets: {
+    connect() {
+      this.sockets.subscribe('request', data => {
+        this.handleReceive(data)
+      })
+      this.connected = true
+      console.log(
+        'You are now connected to: ' + process.env.VUE_APP_BACKEND_URL
+      )
+    },
+    disconnect() {
+      this.handleReceive(
+        '[' +
+          new Date().toTimeString().slice(0, 8) +
+          '] You are now disconnected.'
+      )
+      this.sockets.unsubscribe('request')
+    },
+  },
 }
 </script>
