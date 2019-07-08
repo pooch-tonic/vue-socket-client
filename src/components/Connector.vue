@@ -1,7 +1,14 @@
 <template>
   <div class="connector-container">
     <v-btn :color="color" @click="executeAction(action)">{{ action }}</v-btn>
-    <v-btn color="info" @click="startOperation()">Start operation</v-btn>
+    <v-btn
+      color="info"
+      :loading="operating"
+      :disabled="operating"
+      @click="startOperation()"
+    >
+      Start operation
+    </v-btn>
   </div>
 </template>
 
@@ -43,13 +50,17 @@ export default {
       }
     },
     startOperation() {
-      this.sockets.subscribe('finalize-operation', data => {
-        // TODO
-      })
-      this.operating = true
-      this.$socket.emit('start-operation')
+      if (this.operating === false) {
+        this.sockets.subscribe('op-message', data => {
+          this.writeToLogs(data)
+        })
+        this.sockets.subscribe('finalize-operation', () => this.endOperation())
+        this.operating = true
+        this.$socket.emit('start-operation')
+      }
     },
     endOperation() {
+      this.sockets.unsubscribe('op-message')
       this.sockets.unsubscribe('finalize-operation')
       this.operating = false
       this.writeToLogs(
